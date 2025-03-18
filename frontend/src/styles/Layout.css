@@ -1,0 +1,39 @@
+.app-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .main-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #f4f4f4;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .nav-links a:hover {
+    color: #666;
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    padding: 2rem;
+  }
+  
+  .main-footer {
+    background-color: #f4f4f4;
+    text-align: center;
+    padding: 1rem;
+  }
