@@ -6,12 +6,12 @@ Base = declarative_base()
 class Team(Base):
     __tablename__ = 'teams'
     
-    # Remove the explicit id column
-    name = Column(String, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String, nullable=False)
     seed = Column(Integer)
     region = Column(String)
     
-    # Additional stats columns
+    # Ensure these match exactly with the dictionary keys
     k_off = Column(Float)
     k_def = Column(Float)
     efg_pct = Column(Float)
@@ -26,7 +26,3 @@ class Team(Base):
     three_pt_pct_def = Column(Float)
     ft_pct = Column(Float)
     elite_sos = Column(Float)
-
-    def __init__(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, value)
