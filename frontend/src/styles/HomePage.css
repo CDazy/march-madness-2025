@@ -1,0 +1,41 @@
+.home-page {
+    text-align: center;
+  }
+  
+  .hero-section {
+    background-color: #f4f4f4;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .home-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  .btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .features-section {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .feature {
+    max-width: 300px;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+  }
