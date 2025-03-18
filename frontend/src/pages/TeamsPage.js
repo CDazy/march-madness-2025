@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { fetchTeams } from '../services/api';
-import '../styles/TeamsPage.css';  // Add this import
+import TeamDetailsModal from '../components/TeamDetailsModal';
+import '../styles/TeamsPage.css';
 
 function TeamsPage() {
   const [teams, setTeams] = useState([]);
   const [filter, setFilter] = useState('');
+  const [regionFilter, setRegionFilter] = useState('All');
   const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'ascending' });
+  const [selectedTeam, setSelectedTeam] = useState(null);
 
   useEffect(() => {
     async function loadTeams() {
@@ -15,7 +18,7 @@ function TeamsPage() {
     loadTeams();
   }, []);
 
-  const sortedTeams = React.useMemo(() => {
+  const sortedTeams = useMemo(() => {
     let sortableTeams = [...teams];
     sortableTeams.sort((a, b) => {
       if (a[sortConfig.key] < b[sortConfig.key]) {
@@ -29,9 +32,12 @@ function TeamsPage() {
     return sortableTeams;
   }, [teams, sortConfig]);
 
-  const filteredTeams = sortedTeams.filter(team => 
-    team.name.toLowerCase().includes(filter.toLowerCase())
-  );
+  const filteredTeams = useMemo(() => {
+    return sortedTeams.filter(team => 
+      team.name.toLowerCase().includes(filter.toLowerCase()) &&
+      (regionFilter === 'All' || team.region === regionFilter)
+    );
+  }, [sortedTeams, filter, regionFilter]);
 
   const requestSort = (key) => {
     let direction = 'ascending';
@@ -40,6 +46,9 @@ function TeamsPage() {
     }
     setSortConfig({ key, direction });
   };
+
+  // Get unique regions for filter
+  const regions = ['All', ...new Set(teams.map(team => team.region))];
 
   return (
     <div className="teams-page">
@@ -51,6 +60,16 @@ function TeamsPage() {
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         />
+        <select 
+          value={regionFilter}
+          onChange={(e) => setRegionFilter(e.target.value)}
+        >
+          {regions.map(region => (
+            <option key={region} value={region}>
+              {region}
+            </option>
+          ))}
+        </select>
       </div>
       <table className="teams-table">
         <thead>
@@ -64,7 +83,11 @@ function TeamsPage() {
         </thead>
         <tbody>
           {filteredTeams.map(team => (
-            <tr key={team.id}>
+            <tr 
+              key={team.id} 
+              onClick={() => setSelectedTeam(team)}
+              className="team-row"
+            >
               <td>{team.name}</td>
               <td>{team.seed}</td>
               <td>{team.region}</td>
@@ -74,6 +97,13 @@ function TeamsPage() {
           ))}
         </tbody>
       </table>
+
+      {selectedTeam && (
+        <TeamDetailsModal 
+          team={selectedTeam} 
+          onClose={() => setSelectedTeam(null)} 
+        />
+      )}
     </div>
   );
 }
