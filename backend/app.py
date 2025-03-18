@@ -18,7 +18,21 @@ def get_teams():
             'id': team.id,
             'name': team.name,
             'seed': team.seed,
-            'region': team.region
+            'region': team.region,
+            'k_off': team.k_off,
+            'k_def': team.k_def,
+            'efg_pct': team.efg_pct,
+            'efg_pct_def': team.efg_pct_def,
+            'oreb_pct': team.oreb_pct,
+            'dreb_pct': team.dreb_pct,
+            'op_oreb_pct': team.op_oreb_pct,
+            'op_dreb_pct': team.op_dreb_pct,
+            'two_pt_pct': team.two_pt_pct,
+            'two_pt_pct_def': team.two_pt_pct_def,
+            'three_pt_pct': team.three_pt_pct,
+            'three_pt_pct_def': team.three_pt_pct_def,
+            'ft_pct': team.ft_pct,
+            'elite_sos': team.elite_sos
         } for team in teams
     ])
 
