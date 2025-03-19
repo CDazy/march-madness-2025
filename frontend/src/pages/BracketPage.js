@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { fetchTeams } from '../services/api';
-import { simulateTournament } from '../services/simulationService';
+import { simulateTournament, SimulationStrategies } from '../services/simulationService';
 import GraphicalBracket from '../components/GraphicalBracket';
 import '../styles/BracketPage.css';
 
 function BracketPage() {
   const [teams, setTeams] = useState([]);
   const [tournamentBracket, setTournamentBracket] = useState(null);
+  const [selectedStrategy, setSelectedStrategy] = useState(SimulationStrategies.CURRENT);
+  const [customStats, setCustomStats] = useState([]);
 
   useEffect(() => {
     async function loadTeams() {
@@ -17,28 +19,68 @@ function BracketPage() {
   }, []);
 
   const handleSimulateTournament = () => {
-    const simulatedBracket = simulateTournament(teams);
+    const simulatedBracket = simulateTournament(
+      teams, 
+      selectedStrategy, 
+      selectedStrategy === SimulationStrategies.CUSTOM ? customStats : []
+    );
     setTournamentBracket(simulatedBracket);
   };
 
-  const handleManualWinnerSelect = (matchup, selectedWinner) => {
-    // Logic to manually override simulation
-    console.log('Manual winner selected:', selectedWinner.name);
-    // You'll need to implement logic to update the bracket
-  };
+  const availableStats = [
+    'k_off', 'k_def', 'efg_pct', 'efg_pct_def', 
+    'oreb_pct', 'dreb_pct', 'two_pt_pct', 
+    'three_pt_pct', 'ft_pct', 'elite_sos'
+  ];
 
   return (
     <div className="bracket-page">
-      <h1>Tournament Bracket Simulator</h1>
-      <button onClick={handleSimulateTournament}>
-        Simulate Tournament
-      </button>
-      
+      <div className="simulation-controls">
+        <select 
+          value={selectedStrategy}
+          onChange={(e) => setSelectedStrategy(e.target.value)}
+        >
+          {Object.values(SimulationStrategies).map(strategy => (
+            <option key={strategy} value={strategy}>
+              {strategy.replace(/_/g, ' ')}
+            </option>
+          ))}
+        </select>
+
+        {selectedStrategy === SimulationStrategies.CUSTOM && (
+          <div className="custom-stats-selector">
+            <h4>Select Custom Stats</h4>
+            <div className="stats-grid">
+              {availableStats.map(stat => (
+                <label key={stat} className="stat-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={customStats.includes(stat)}
+                    onChange={() => {
+                      setCustomStats(prev => 
+                        prev.includes(stat) 
+                          ? prev.filter(s => s !== stat)
+                          : [...prev, stat]
+                      );
+                    }}
+                  />
+                  {stat}
+                </label>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <button 
+          onClick={handleSimulateTournament}
+          disabled={teams.length === 0}
+        >
+          Simulate Tournament
+        </button>
+      </div>
+
       {tournamentBracket && (
-        <GraphicalBracket
-          tournamentBracket={tournamentBracket}
-          onManualWinnerSelect={handleManualWinnerSelect}
-        />
+        <GraphicalBracket tournamentBracket={tournamentBracket} />
       )}
     </div>
   );
