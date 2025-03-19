@@ -7,7 +7,7 @@ import '../styles/BracketPage.css';
 function BracketPage() {
   const [teams, setTeams] = useState([]);
   const [tournamentBracket, setTournamentBracket] = useState(null);
-  const [selectedStrategy, setSelectedStrategy] = useState(SimulationStrategies.CURRENT);
+  const [selectedStrategy, setSelectedStrategy] = useState(SimulationStrategies.CHALK);
   const [customStats, setCustomStats] = useState([]);
 
   useEffect(() => {
@@ -25,6 +25,10 @@ function BracketPage() {
       selectedStrategy === SimulationStrategies.CUSTOM ? customStats : []
     );
     setTournamentBracket(simulatedBracket);
+  };
+
+  const handleClearAllStats = () => {
+    setCustomStats([]);
   };
 
   const availableStats = [
@@ -49,7 +53,20 @@ function BracketPage() {
 
         {selectedStrategy === SimulationStrategies.CUSTOM && (
           <div className="custom-stats-selector">
-            <h4>Select Custom Stats</h4>
+            <div className="stats-header">
+              <h4>Select Custom Stats</h4>
+              <label className="clear-all-checkbox">
+                <input
+                  type="checkbox"
+                  checked={customStats.length === availableStats.length}
+                  onChange={customStats.length === availableStats.length 
+                    ? handleClearAllStats 
+                    : () => setCustomStats([...availableStats])
+                  }
+                />
+                {customStats.length === availableStats.length ? 'Clear All' : 'Select All'}
+              </label>
+            </div>
             <div className="stats-grid">
               {availableStats.map(stat => (
                 <label key={stat} className="stat-checkbox">

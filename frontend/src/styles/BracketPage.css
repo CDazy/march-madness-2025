@@ -49,3 +49,16 @@
   background-color: #cccccc;
   cursor: not-allowed;
 }
+
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.clear-all-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}

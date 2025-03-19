@@ -1,11 +1,11 @@
 export const SimulationStrategies = {
-  CHALK: 'chalk',
-  STATISTICAL_SCORING: 'statistical_scoring',
-  CURRENT: 'current',
-  ENHANCED_CURRENT: 'enhanced_current',
-  THREE_PT_FOCUS: 'three_pt_focus',
-  RANDOM: 'random',
-  CUSTOM: 'custom'
+  CHALK: 'Chalk',
+  RANDOM: 'Random',
+  CUSTOM: 'Custom',
+  THREE_PT_FOCUS: 'Three_pt_Strategy',
+  CURRENT: 'AI_Strategy',
+  ENHANCED_CURRENT: 'Enhanced_AI_Strategy',
+  STATISTICAL_SCORING: 'All_Stats',
 };
 
 export const simulateMatchup = (team1, team2, strategy, customStats = []) => {

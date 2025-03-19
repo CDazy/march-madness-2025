@@ -37,7 +37,6 @@ function GraphicalBracket({ tournamentBracket }) {
             title: 'First Round',
             seeds: firstRoundOrder.map(({ index1, index2 }) => ({
               id: index1 + 1,
-              date: new Date().toDateString(),
               teams: [
                 { name: formatTeamName(regionData.firstRound[index1].team1, isRtl) },
                 { name: formatTeamName(regionData.firstRound[index1].team2, isRtl) }
@@ -48,7 +47,6 @@ function GraphicalBracket({ tournamentBracket }) {
             title: 'Second Round',
             seeds: regionData.secondRound.map((matchup, index) => ({
               id: index + 1,
-              date: new Date().toDateString(),
               teams: [
                 { name: formatTeamName(matchup.team1, isRtl) },
                 { name: formatTeamName(matchup.team2, isRtl) }
@@ -59,7 +57,6 @@ function GraphicalBracket({ tournamentBracket }) {
             title: 'Sweet Sixteen',
             seeds: regionData.sweetSixteen.map((matchup, index) => ({
               id: index + 1,
-              date: new Date().toDateString(),
               teams: [
                 { name: formatTeamName(matchup.team1, isRtl) },
                 { name: formatTeamName(matchup.team2, isRtl) }
@@ -70,7 +67,6 @@ function GraphicalBracket({ tournamentBracket }) {
             title: 'Elite Eight',
             seeds: regionData.eliteEight.map((matchup, index) => ({
               id: index + 1,
-              date: new Date().toDateString(),
               teams: [
                 { name: formatTeamName(matchup.team1, isRtl) },
                 { name: formatTeamName(matchup.team2, isRtl) }
@@ -86,7 +82,7 @@ function GraphicalBracket({ tournamentBracket }) {
         title: 'Final Four',
         seeds: finalFour.map((matchup, index) => ({
           id: index + 1,
-          date: new Date().toDateString(),
+          date: 'April 5, 2025',
           teams: [
             { name: `${matchup.team1.seed} ${matchup.team1.name}` },
             { name: `${matchup.team2.seed} ${matchup.team2.name}` }
@@ -98,7 +94,7 @@ function GraphicalBracket({ tournamentBracket }) {
         seeds: [
           {
             id: 1,
-            date: new Date().toDateString(),
+            date: 'April 7, 2025',
             teams: [
               { name: `${championship.team1.seed} ${championship.team1.name}` },
               { name: `${championship.team2.seed} ${championship.team2.name}` }
@@ -140,7 +136,7 @@ function GraphicalBracket({ tournamentBracket }) {
           mobileBreakpoint={300}
         />
         <div className="champion">
-          <h3>Champion: {tournamentBracket.champion.name}</h3>
+          <h1>Champion: {tournamentBracket.champion.name}</h1>
         </div>
       </div>
 
