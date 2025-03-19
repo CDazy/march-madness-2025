@@ -33,12 +33,15 @@
 }
 
 .final-stages {
-    display: flex;
-    flex-direction: column;
+    width: 45%;
     align-items: center;
-    width: 45%; /* Adjust width to make final stages wider */
-    min-width: 250px;
-    margin-top: 20px; /* Add margin for better spacing */
+    border: 1px solid #ddd;
+    padding: 10px;
+    overflow-y: hidden; /* Diorizontal scroll for final stages */
+}
+
+.final-stages h2 {
+    text-align: center;
 }
 
 /* Media queries for mobile devices */
@@ -54,9 +57,10 @@
     }
 
     .final-stages {
-        width: 90%; /* Adjust width to fit within the screen */
+        width: 100%; /* Full width for very small screens */
         min-width: 200px; /* Reduce minimum width */
         margin-top: 20px; /* Ensure spacing remains consistent */
+        overflow-x: auto; /* Enable horizontal scroll for final stages */
     }
 }
 
@@ -70,6 +74,7 @@
         width: 100%; /* Full width for very small screens */
         min-width: 150px; /* Further reduce minimum width */
         margin-top: 20px; /* Ensure spacing remains consistent */
+        overflow-x: auto; /* Enable horizontal scroll for final stages */
     }
 }
 

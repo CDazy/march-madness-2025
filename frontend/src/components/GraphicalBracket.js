@@ -135,11 +135,11 @@ function GraphicalBracket({ tournamentBracket }) {
           )}
           mobileBreakpoint={300}
         />
-        <div className="champion">
+        
+      </div>
+      <div className="champion">
           <h1>Champion: {tournamentBracket.champion.name}</h1>
         </div>
-      </div>
-
       <div className="bottom-regions">
         <div className="region-bracket midwest-region">
           <h3>Midwest Region</h3>
