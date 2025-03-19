@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { fetchTeams } from '../services/api';
-import { simulateTournament } from '../services/simulationService';
+import { simulateTournament, SimulationStrategies } from '../services/simulationService';
+import GraphicalBracket from '../components/GraphicalBracket';
 import '../styles/BracketPage.css';
 
 function BracketPage() {
   const [teams, setTeams] = useState([]);
   const [tournamentBracket, setTournamentBracket] = useState(null);
+  const [selectedStrategy, setSelectedStrategy] = useState(SimulationStrategies.CHALK);
+  const [customStats, setCustomStats] = useState([]);
 
   useEffect(() => {
     async function loadTeams() {
@@ -16,89 +19,85 @@ function BracketPage() {
   }, []);
 
   const handleSimulateTournament = () => {
-    const simulatedBracket = simulateTournament(teams);
+    const simulatedBracket = simulateTournament(
+      teams, 
+      selectedStrategy, 
+      selectedStrategy === SimulationStrategies.CUSTOM ? customStats : []
+    );
     setTournamentBracket(simulatedBracket);
   };
 
-  const renderRegionBracket = (regionName, regionData) => {
-    if (!regionData) return null;
-
-    return (
-      <div key={regionName} className="region-bracket">
-        <h3>{regionName} Region</h3>
-        <div className="round">
-          <h4>First Round</h4>
-          {regionData.firstRound.map((matchup, index) => (
-            <div key={index} className="matchup">
-              <div>{matchup.team1.name} vs {matchup.team2.name}</div>
-              <div>Winner: {matchup.winner.name}</div>
-            </div>
-          ))}
-        </div>
-        <div className="round">
-          <h4>Second Round</h4>
-          {regionData.secondRound.map((matchup, index) => (
-            <div key={index} className="matchup">
-              <div>{matchup.team1.name} vs {matchup.team2.name}</div>
-              <div>Winner: {matchup.winner.name}</div>
-            </div>
-          ))}
-        </div>
-        <div className="round">
-          <h4>Sweet Sixteen</h4>
-          {regionData.sweetSixteen.map((matchup, index) => (
-            <div key={index} className="matchup">
-              <div>{matchup.team1.name} vs {matchup.team2.name}</div>
-              <div>Winner: {matchup.winner.name}</div>
-            </div>
-          ))}
-        </div>
-        <div className="round">
-          <h4>Elite Eight</h4>
-          {regionData.eliteEight.map((matchup, index) => (
-            <div key={index} className="matchup">
-              <div>{matchup.team1.name} vs {matchup.team2.name}</div>
-              <div>Winner: {matchup.winner.name}</div>
-            </div>
-          ))}
-        </div>
-        <div className="round">
-          <h4>Region Champion</h4>
-          <div>{regionData.regionChampion.name}</div>
-        </div>
-      </div>
-    );
+  const handleClearAllStats = () => {
+    setCustomStats([]);
   };
+
+  const availableStats = [
+    'k_off', 'k_def', 'efg_pct', 'efg_pct_def', 
+    'oreb_pct', 'dreb_pct', 'two_pt_pct', 
+    'three_pt_pct', 'ft_pct', 'elite_sos'
+  ];
 
   return (
     <div className="bracket-page">
-      <h1>Tournament Bracket Simulator</h1>
-      <button onClick={handleSimulateTournament}>
-        Simulate Tournament
-      </button>
-      
-      {tournamentBracket && (
-        <div>
-          <div className="tournament-bracket">
-            {Object.entries(tournamentBracket.regions).map(([regionName, regionData]) => 
-              renderRegionBracket(regionName, regionData)
-            )}
-          </div>
-          <div className="final-stages">
-            <h2>Final Four</h2>
-            {tournamentBracket.finalFour.map((matchup, index) => (
-              <div key={index} className="matchup">
-                <div>{matchup.team1.name} vs {matchup.team2.name}</div>
-                <div>Winner: {matchup.winner.name}</div>
-              </div>
-            ))}
-            <h2>Championship</h2>
-            <div className="matchup">
-              <div>{tournamentBracket.championship.team1.name} vs {tournamentBracket.championship.team2.name}</div>
-              <div>Champion: {tournamentBracket.champion.name}</div>
+      <div className="simulation-controls">
+        <select 
+          value={selectedStrategy}
+          onChange={(e) => setSelectedStrategy(e.target.value)}
+        >
+          {Object.values(SimulationStrategies).map(strategy => (
+            <option key={strategy} value={strategy}>
+              {strategy.replace(/_/g, ' ')}
+            </option>
+          ))}
+        </select>
+
+        {selectedStrategy === SimulationStrategies.CUSTOM && (
+          <div className="custom-stats-selector">
+            <div className="stats-header">
+              <h4>Select Custom Stats</h4>
+              <label className="clear-all-checkbox">
+                <input
+                  type="checkbox"
+                  checked={customStats.length === availableStats.length}
+                  onChange={customStats.length === availableStats.length 
+                    ? handleClearAllStats 
+                    : () => setCustomStats([...availableStats])
+                  }
+                />
+                {customStats.length === availableStats.length ? 'Clear All' : 'Select All'}
+              </label>
+            </div>
+            <div className="stats-grid">
+              {availableStats.map(stat => (
+                <label key={stat} className="stat-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={customStats.includes(stat)}
+                    onChange={() => {
+                      setCustomStats(prev => 
+                        prev.includes(stat) 
+                          ? prev.filter(s => s !== stat)
+                          : [...prev, stat]
+                      );
+                    }}
+                  />
+                  {stat}
+                </label>
+              ))}
             </div>
           </div>
-        </div>
+        )}
+
+        <button 
+          onClick={handleSimulateTournament}
+          disabled={teams.length === 0}
+        >
+          Simulate Tournament
+        </button>
+      </div>
+
+      {tournamentBracket && (
+        <GraphicalBracket tournamentBracket={tournamentBracket} />
       )}
     </div>
   );

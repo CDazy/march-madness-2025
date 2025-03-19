@@ -1,25 +1,64 @@
 .bracket-page {
-    text-align: center;
-  }
-  
-  .tournament-bracket {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-  }
-  
-  .region-bracket {
-    border: 1px solid #ddd;
-    padding: 15px;
-    width: 22%;
-  }
-  
-  .round {
-    margin-bottom: 15px;
-  }
-  
-  .matchup {
-    margin: 10px 0;
-    padding: 5px;
-    background-color: #f4f4f4;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.simulation-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.simulation-controls select {
+  margin-bottom: 15px;
+  padding: 8px;
+  width: 300px;
+}
+
+.custom-stats-selector {
+  margin-bottom: 15px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.stat-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.simulation-controls button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.simulation-controls button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.clear-all-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}

@@ -1,14 +1,11 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { fetchTeams } from '../services/api';
-import TeamDetailsModal from '../components/TeamDetailsModal';
 import '../styles/TeamsPage.css';
 
 function TeamsPage() {
   const [teams, setTeams] = useState([]);
   const [filter, setFilter] = useState('');
-  const [regionFilter, setRegionFilter] = useState('All');
-  const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'ascending' });
-  const [selectedTeam, setSelectedTeam] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ key: 'seed', direction: 'ascending' });
 
   useEffect(() => {
     async function loadTeams() {
@@ -18,7 +15,7 @@ function TeamsPage() {
     loadTeams();
   }, []);
 
-  const sortedTeams = useMemo(() => {
+  const sortedTeams = React.useMemo(() => {
     let sortableTeams = [...teams];
     sortableTeams.sort((a, b) => {
       if (a[sortConfig.key] < b[sortConfig.key]) {
@@ -32,12 +29,9 @@ function TeamsPage() {
     return sortableTeams;
   }, [teams, sortConfig]);
 
-  const filteredTeams = useMemo(() => {
-    return sortedTeams.filter(team => 
-      team.name.toLowerCase().includes(filter.toLowerCase()) &&
-      (regionFilter === 'All' || team.region === regionFilter)
-    );
-  }, [sortedTeams, filter, regionFilter]);
+  const filteredTeams = sortedTeams.filter(team => 
+    team.name.toLowerCase().includes(filter.toLowerCase())
+  );
 
   const requestSort = (key) => {
     let direction = 'ascending';
@@ -47,8 +41,17 @@ function TeamsPage() {
     setSortConfig({ key, direction });
   };
 
-  // Get unique regions for filter
-  const regions = ['All', ...new Set(teams.map(team => team.region))];
+  // Define all columns to display, with seed and name swapped
+  const columns = [
+    'seed', 'name', 'region', 
+    'k_off', 'k_def', 
+    'efg_pct', 'efg_pct_def',
+    'oreb_pct', 'dreb_pct',
+    'op_oreb_pct', 'op_dreb_pct',
+    'two_pt_pct', 'two_pt_pct_def',
+    'three_pt_pct', 'three_pt_pct_def',
+    'ft_pct', 'elite_sos'
+  ];
 
   return (
     <div className="teams-page">
@@ -60,50 +63,38 @@ function TeamsPage() {
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
         />
-        <select 
-          value={regionFilter}
-          onChange={(e) => setRegionFilter(e.target.value)}
-        >
-          {regions.map(region => (
-            <option key={region} value={region}>
-              {region}
-            </option>
-          ))}
-        </select>
       </div>
-      <table className="teams-table">
-        <thead>
-          <tr>
-            <th onClick={() => requestSort('name')}>Name</th>
-            <th onClick={() => requestSort('seed')}>Seed</th>
-            <th onClick={() => requestSort('region')}>Region</th>
-            <th onClick={() => requestSort('k_off')}>Offensive Rating</th>
-            <th onClick={() => requestSort('k_def')}>Defensive Rating</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTeams.map(team => (
-            <tr 
-              key={team.id} 
-              onClick={() => setSelectedTeam(team)}
-              className="team-row"
-            >
-              <td>{team.name}</td>
-              <td>{team.seed}</td>
-              <td>{team.region}</td>
-              <td>{team.k_off.toFixed(2)}</td>
-              <td>{team.k_def.toFixed(2)}</td>
+      <div className="table-container">
+        <table className="teams-table">
+          <thead>
+            <tr>
+              {columns.map(column => (
+                <th 
+                  key={column} 
+                  onClick={() => requestSort(column)}
+                >
+                  {column.replace(/_/g, ' ').toUpperCase()}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+          {filteredTeams.map((team, index) => (
+            <tr key={index}>
+              {columns.map(column => (
+                <td key={column}>
+                  {typeof team[column] === 'number' 
+                    ? (column === 'seed' 
+                      ? team[column] 
+                      : team[column].toFixed(2)) 
+                    : team[column]}
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>
-      </table>
-
-      {selectedTeam && (
-        <TeamDetailsModal 
-          team={selectedTeam} 
-          onClose={() => setSelectedTeam(null)} 
-        />
-      )}
+        </table>
+      </div>
     </div>
   );
 }
