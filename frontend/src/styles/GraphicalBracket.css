@@ -5,6 +5,7 @@
     width: 100%;
     height: auto;
     transform-origin: top center;
+    overflow-x: auto; /* Enable horizontal scroll */
 }
 
 .top-regions, .bottom-regions {
@@ -36,5 +37,35 @@
     align-items: center;
     width: 20%;
     min-width: 250px;
+}
+
+/* Media queries for mobile devices */
+@media (max-width: 768px) {
+    .top-regions, .bottom-regions {
+        flex-direction: column; /* Stack regions vertically */
+        gap: 10px; /* Reduce gap */
+    }
+
+    .region-bracket {
+        width: 90%; /* Adjust width to fit within the screen */
+        min-width: 200px; /* Reduce minimum width */
+    }
+
+    .final-stages {
+        width: 90%; /* Adjust width to fit within the screen */
+        min-width: 200px; /* Reduce minimum width */
+    }
+}
+
+@media (max-width: 480px) {
+    .region-bracket {
+        width: 100%; /* Full width for very small screens */
+        min-width: 150px; /* Further reduce minimum width */
+    }
+
+    .final-stages {
+        width: 100%; /* Full width for very small screens */
+        min-width: 150px; /* Further reduce minimum width */
+    }
 }
 
