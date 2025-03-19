@@ -193,10 +193,19 @@ const customStatSimulation = (team1, team2, customStats) => {
     ];
   
     // Simulate play-in games
-    const playInWinners = playInMatchups.map(matchup => ({
-      winner: simulateMatchup(matchup.team1, matchup.team2, strategy, customStats).winner,
-      region: matchup.region
-    }));
+    const playInWinners = playInMatchups.map(matchup => {
+      if (matchup.team1.name === 'North Carolina' && matchup.team2.name === 'San Diego St.') {
+        return { winner: matchup.team1, region: matchup.region };
+      }
+      if (matchup.team1.name === 'Alabama St.' && matchup.team2.name === 'Saint Francis') {
+        return { winner: matchup.team1, region: matchup.region };
+      }
+      // Simulate other matchups
+      return {
+        winner: simulateMatchup(matchup.team1, matchup.team2, strategy, customStats).winner,
+        region: matchup.region
+      };
+    });
   
     // Remove losing play-in teams from region teams
     const adjustedRegionTeams = regionTeams.filter(team => 

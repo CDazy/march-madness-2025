@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
 import TeamsPage from './pages/TeamsPage';
 import BracketPage from './pages/BracketPage';
+import Help from './pages/Help';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/teams" element={<TeamsPage />} />
           <Route path="/bracket" element={<BracketPage />} />
+          <Route path="/help" element={<Help />} />
         </Routes>
       </Layout>
     </Router>

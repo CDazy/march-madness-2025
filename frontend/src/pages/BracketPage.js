@@ -40,6 +40,8 @@ function BracketPage() {
   return (
     <div className="bracket-page">
       <div className="simulation-controls">
+        <h3>Simulation Strategy</h3>
+        <p>Select a strategy to simulate the tournament:</p>
         <select 
           value={selectedStrategy}
           onChange={(e) => setSelectedStrategy(e.target.value)}

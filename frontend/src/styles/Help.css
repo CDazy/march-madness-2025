@@ -1,0 +1,28 @@
+.help-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    line-height: 1.6;
+  }
+  
+  .help-section {
+    margin-bottom: 30px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .page-descriptions, .strategy-descriptions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .page-description, .strategy-description {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+    border-radius: 5px;
+  }
+  
+  

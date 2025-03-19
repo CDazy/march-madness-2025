@@ -13,6 +13,7 @@ function Layout({ children }) {
           <Link to="/">Home</Link>
           <Link to="/teams">Teams</Link>
           <Link to="/bracket">Bracket</Link>
+          <Link to="/help">Help</Link>
         </div>
       </nav>
       <main className="main-content">
